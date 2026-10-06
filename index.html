@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petualangan Sistem Pencernaan Manusia - IPAS Kelas V</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fffbe1',
+                            100: '#fff3b8',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                        },
+                        organ: {
+                            mulut: '#f87171',
+                            kerongkongan: '#fb923c',
+                            lambung: '#facc15',
+                            usushalus: '#4ade80',
+                            ususbesar: '#38bdf8',
+                            rektum: '#a78bfa',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Fredoka', 'sans-serif'],
+                        body: ['Lexend', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Lexend', sans-serif; }
+        h1, h2, h3, h4, .font-heading { font-family: 'Fredoka', sans-serif; }
+        
+        .pulse-organ {
+            animation: organPulse 2s infinite ease-in-out;
+        }
+        @keyframes organPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .food-particle {
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-amber-50/60 text-slate-800 min-h-screen flex flex-col selection:bg-amber-200">
+
+    <!-- Header App Bar -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-amber-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('orientasi')">
+                <div class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-bold text-xl shadow-md shadow-amber-200">
+                    🍎
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-bold font-heading text-slate-800 leading-tight">CernaExplora</h1>
+                    <p class="text-xs text-amber-600 font-medium hidden sm:block">IPAS Kelas V • Pembelajaran Mendalam</p>
+                </div>
+            </div>
+
+            <!-- Stage Progress Indicator -->
+            <nav class="hidden md:flex items-center gap-1 bg-amber-100/70 p-1.5 rounded-full text-xs font-semibold">
+                <button onclick="switchTab('orientasi')" id="nav-orientasi" class="nav-btn px-3 py-1.5 rounded-full transition duration-200 text-amber-800 hover:bg-white/60">1. Orientasi</button>
+                <button onclick="switchTab('eksplorasi')" id="nav-eksplorasi" class="nav-btn px-3 py-1.5 rounded-full transition duration-200 text-amber-800 hover:bg-white/60">2. Eksplorasi</button>
+                <button onclick="switchTab('pemahaman')" id="nav-pemahaman" class="nav-btn px-3 py-1.5 rounded-full transition duration-200 text-amber-800 hover:bg-white/60">3. Pemahaman</button>
+                <button onclick="switchTab('aplikasi')" id="nav-aplikasi" class="nav-btn px-3 py-1.5 rounded-full transition duration-200 text-amber-800 hover:bg-white/60">4. Aplikasi</button>
+                <button onclick="switchTab('refleksi')" id="nav-refleksi" class="nav-btn px-3 py-1.5 rounded-full transition duration-200 text-amber-800 hover:bg-white/60">5. Refleksi</button>
+            </nav>
+
+            <!-- User Stats & Sound Toggle -->
+            <div class="flex items-center gap-3">
+                <button onclick="toggleAudio()" id="audio-btn" class="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition" title="Suara">
+                    🔊
+                </button>
+                <div class="bg-amber-100 border border-amber-300 px-3 py-1 rounded-full flex items-center gap-1.5 font-heading text-sm text-amber-900 shadow-sm">
+                    <span>⭐</span>
+                    <span id="user-score">0</span> XP
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Stage Progress Slider Bar -->
+        <div class="md:hidden flex overflow-x-auto gap-2 px-4 py-2 bg-amber-100/50 border-t border-amber-200/60 text-xs font-medium no-scrollbar">
+            <button onclick="switchTab('orientasi')" id="mnav-orientasi" class="whitespace-nowrap px-3 py-1 rounded-full">1. Orientasi</button>
+            <button onclick="switchTab('eksplorasi')" id="mnav-eksplorasi" class="whitespace-nowrap px-3 py-1 rounded-full">2. Eksplorasi</button>
+            <button onclick="switchTab('pemahaman')" id="mnav-pemahaman" class="whitespace-nowrap px-3 py-1 rounded-full">3. Pemahaman</button>
+            <button onclick="switchTab('aplikasi')" id="mnav-aplikasi" class="whitespace-nowrap px-3 py-1 rounded-full">4. Aplikasi</button>
+            <button onclick="switchTab('refleksi')" id="mnav-refleksi" class="whitespace-nowrap px-3 py-1 rounded-full">5. Refleksi</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- SECTION 1: ORIENTASI -->
+        <section id="sec-orientasi" class="tab-content block space-y-6">
+            <!-- Hero Fenomena -->
+            <div class="bg-gradient-to-br from-amber-400 via-orange-400 to-red-400 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-20 text-[180px] pointer-events-none select-none">🍔</div>
+                <div class="max-w-2xl space-y-4 relative z-10">
+                    <span class="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider backdrop-blur-sm inline-block">
+                        Tahap 1: Orientasi Bermakna
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold font-heading leading-tight">
+                        Pernahkah Kamu Berpikir, Kemana Perginya Makanan Setelah Ditelan?
+                    </h2>
+                    <p class="text-amber-50 text-sm sm:text-base leading-relaxed">
+                        Pagi ini kamu mungkin makan sarapan lezat seperti nasi goreng atau roti. Namun, beberapa jam kemudian perutmu merasa lapar kembali dan kamu punya energi untuk berlari! Bagaimana tubuhmu mengolah makanan itu?
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('eksplorasi')" class="bg-white text-orange-600 font-bold px-6 py-3 rounded-2xl shadow-lg hover:bg-amber-50 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center gap-2">
+                            <span>Mulai Mulai Petualangan!</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pertanyaan Pemantik Interaktif -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-amber-400 transition">
+                    <div class="w-12 h-12 bg-red-100 text-red-500 rounded-2xl flex items-center justify-center text-2xl">⚡</div>
+                    <h3 class="font-bold font-heading text-slate-800 text-lg">1. Sumber Energi</h3>
+                    <p class="text-slate-600 text-sm">Mengapa tubuh kita lemas saat terlambat makan? Dari mana energi berasal?</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-amber-400 transition">
+                    <div class="w-12 h-12 bg-orange-100 text-orange-500 rounded-2xl flex items-center justify-center text-2xl">🔊</div>
+                    <h3 class="font-bold font-heading text-slate-800 text-lg">2. Suara Perut</h3>
+                    <p class="text-slate-600 text-sm">Mengapa perut bisa berbunyi "Kruuuk..." saat kita lapar?</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3 hover:border-amber-400 transition">
+                    <div class="w-12 h-12 bg-yellow-100 text-yellow-600 rounded-2xl flex items-center justify-center text-2xl">💧</div>
+                    <h3 class="font-bold font-heading text-slate-800 text-lg">3. Perubahan Bentuk</h3>
+                    <p class="text-slate-600 text-sm">Bagaimana makanan keras seperti apel bisa berubah menjadi zat cair halus di tubuh?</p>
+                </div>
+            </div>
+
+            <!-- Mini Survey Kesadaran -->
+            <div class="bg-white rounded-2xl p-6 border border-amber-200 shadow-sm space-y-4">
+                <h3 class="font-bold font-heading text-slate-800 text-lg flex items-center gap-2">
+                    <span>🤔</span> Refleksi Awal: Cek Kebiasaan Makanmu
+                </h3>
+                <p class="text-sm text-slate-600">Pilih salah satu hal yang sering kamu alami saat makan:</p>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <button onclick="setInitialHabit('cepat', this)" class="habit-opt p-4 rounded-xl border-2 border-slate-200 text-left hover:border-amber-400 transition">
+                        <div class="font-bold text-slate-800 text-sm">Makan Terburu-buru</div>
+                        <div class="text-xs text-slate-500 mt-1">Mengunyah hanya 2-3 kali langsung ditelan</div>
+                    </button>
+                    <button onclick="setInitialHabit('air', this)" class="habit-opt p-4 rounded-xl border-2 border-slate-200 text-left hover:border-amber-400 transition">
+                        <div class="font-bold text-slate-800 text-sm">Jarang Minum Air</div>
+                        <div class="text-xs text-slate-500 mt-1">Lupa minum air putih sepanjang hari</div>
+                    </button>
+                    <button onclick="setInitialHabit('sehat', this)" class="habit-opt p-4 rounded-xl border-2 border-slate-200 text-left hover:border-amber-400 transition">
+                        <div class="font-bold text-slate-800 text-sm">Mengunyah Perlahan</div>
+                        <div class="text-xs text-slate-500 mt-1">Mengunyah makanan sampai halus dan cukup minum</div>
+                    </button>
+                </div>
+                <div id="habit-feedback" class="hidden p-4 rounded-xl text-sm"></div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: EKSPLORASI ORGAN & PROSES -->
+        <section id="sec-eksplorasi" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">Tahap 2: Eksplorasi Interaktif</span>
+                        <h2 class="text-2xl font-bold font-heading text-slate-800 mt-1">Anatomi & Peta Organ Pencernaan</h2>
+                        <p class="text-slate-600 text-sm">Klik pada bagian organ manusia di bawah ini untuk mempelajari bentuk, fungsi, dan jenis pencernaannya!</p>
+                    </div>
+                    <!-- Mode Switch: Mekanik vs Kimiawi -->
+                    <div class="bg-slate-100 p-1 rounded-2xl flex items-center text-xs font-bold">
+                        <button onclick="setDigestionMode('all')" id="mode-all" class="px-3 py-1.5 rounded-xl bg-white shadow-sm text-slate-800">Semua Organ</button>
+                        <button onclick="setDigestionMode('mekanik')" id="mode-mekanik" class="px-3 py-1.5 rounded-xl text-slate-500 hover:text-slate-800">Pencernaan Mekanik</button>
+                        <button onclick="setDigestionMode('kimiawi')" id="mode-kimiawi" class="px-3 py-1.5 rounded-xl text-slate-500 hover:text-slate-800">Pencernaan Kimiawi</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <!-- SVG Interactive Body Diagram -->
+                    <div class="lg:col-span-5 flex justify-center relative bg-gradient-to-b from-sky-50 to-indigo-50/50 rounded-2xl p-6 border border-slate-100">
+                        <svg viewBox="0 0 350 500" class="w-full max-w-[320px] h-auto drop-shadow-md">
+                            <!-- Body Outline Silhouette -->
+                            <path d="M175,20 C200,20 220,35 220,60 C220,75 210,85 205,95 C220,105 245,120 250,150 L255,250 C250,270 240,290 235,350 L220,480 L190,480 L185,380 L165,380 L160,480 L130,480 L115,350 C110,290 100,270 95,250 L100,150 C105,120 130,105 145,95 C140,85 130,75 130,60 C130,35 150,20 175,20 Z" 
+                                  fill="#e2e8f0" stroke="#cbd5e1" stroke-width="3" opacity="0.6"/>
+
+                            <!-- 1. Mulut -->
+                            <g onclick="selectOrgan('mulut')" class="cursor-pointer group">
+                                <ellipse id="svg-mulut" cx="175" cy="70" rx="20" ry="12" fill="#f87171" class="transition hover:scale-110 transform origin-center"/>
+                                <text x="175" y="74" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Mulut</text>
+                            </g>
+
+                            <!-- 2. Kerongkongan -->
+                            <g onclick="selectOrgan('kerongkongan')" class="cursor-pointer group">
+                                <rect id="svg-kerongkongan" x="168" y="90" width="14" height="65" rx="7" fill="#fb923c" class="transition hover:scale-105 transform origin-center"/>
+                                <text x="175" y="125" text-anchor="middle" fill="white" font-size="8" font-weight="bold" transform="rotate(-90 175 125)">Kerongkongan</text>
+                            </g>
+
+                            <!-- 3. Lambung -->
+                            <g onclick="selectOrgan('lambung')" class="cursor-pointer group">
+                                <path id="svg-lambung" d="M165,160 C195,155 215,170 205,200 C195,215 165,210 155,185 Z" fill="#facc15" stroke="#eab308" stroke-width="2" class="transition hover:scale-110 transform origin-center"/>
+                                <text x="180" y="185" text-anchor="middle" fill="#713f12" font-size="9" font-weight="bold">Lambung</text>
+                            </g>
+
+                            <!-- 4. Usus Halus -->
+                            <g onclick="selectOrgan('usushalus')" class="cursor-pointer group">
+                                <rect id="svg-usushalus" x="145" y="225" width="60" height="45" rx="15" fill="#4ade80" stroke="#22c55e" stroke-width="2" class="transition hover:scale-105 transform origin-center"/>
+                                <text x="175" y="250" text-anchor="middle" fill="#14532d" font-size="9" font-weight="bold">Usus Halus</text>
+                            </g>
+
+                            <!-- 5. Usus Besar -->
+                            <g onclick="selectOrgan('ususbesar')" class="cursor-pointer group">
+                                <path id="svg-ususbesar" d="M130,215 L220,215 L220,285 L200,285 L200,235 L150,235 L150,285 L130,285 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="2" class="transition hover:scale-105 transform origin-center"/>
+                                <text x="175" y="228" text-anchor="middle" fill="#0c4a6e" font-size="8" font-weight="bold">Usus Besar</text>
+                            </g>
+
+                            <!-- 6. Rektum & Anus -->
+                            <g onclick="selectOrgan('rektum')" class="cursor-pointer group">
+                                <rect id="svg-rektum" x="168" y="288" width="14" height="30" rx="5" fill="#a78bfa" stroke="#7c3aed" stroke-width="2" class="transition hover:scale-110 transform origin-center"/>
+                                <text x="175" y="306" text-anchor="middle" fill="white" font-size="7" font-weight="bold">Anus</text>
+                            </g>
+
+                            <!-- Pointer Helper -->
+                            <circle cx="175" cy="70" r="3" fill="white" class="animate-ping"/>
+                        </svg>
+                    </div>
+
+                    <!-- Organ Detail Card Display -->
+                    <div class="lg:col-span-7 bg-amber-50/70 border border-amber-200 rounded-3xl p-6 min-h-[360px] flex flex-col justify-between" id="organ-detail-card">
+                        <!-- Content populated dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulator Alur Makanan (Visual Interactive Food Journey) -->
+            <div class="bg-gradient-to-r from-slate-900 to-indigo-950 text-white p-6 rounded-3xl shadow-xl space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <div>
+                        <h3 class="text-xl font-bold font-heading text-amber-300 flex items-center gap-2">
+                            <span>🚀</span> Simulator Perjalanan Makanan Real-Time
+                        </h3>
+                        <p class="text-slate-300 text-xs sm:text-sm">Pilih jenis makanan dan amati transformasinya di setiap stasiun pencernaan!</p>
+                    </div>
+                    <!-- Food Selector -->
+                    <div class="flex items-center gap-2">
+                        <button onclick="startFoodSimulation('Nasi (Karbohidrat)', '🍚')" class="food-btn px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold text-xs transition">🍚 Nasi</button>
+                        <button onclick="startFoodSimulation('Ayam (Protein)', '🍗')" class="food-btn px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition border border-slate-700">🍗 Ayam</button>
+                        <button onclick="startFoodSimulation('Apel (Serat/Vitamin)', '🍎')" class="food-btn px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition border border-slate-700">🍎 Apel</button>
+                    </div>
+                </div>
+
+                <!-- Animation Track -->
+                <div class="relative bg-slate-800/80 rounded-2xl p-6 border border-slate-700 overflow-hidden min-h-[140px] flex items-center justify-between gap-2">
+                    <!-- Path node items -->
+                    <div class="sim-node text-center z-10" id="sim-mulut">
+                        <div class="w-10 h-10 rounded-full bg-red-500/30 border border-red-400 flex items-center justify-center text-lg mx-auto mb-1">👄</div>
+                        <span class="text-[10px] text-slate-300 font-bold block">1. Mulut</span>
+                    </div>
+                    <div class="h-1 flex-1 bg-slate-700 rounded"></div>
+                    <div class="sim-node text-center z-10" id="sim-kerongkongan">
+                        <div class="w-10 h-10 rounded-full bg-orange-500/30 border border-orange-400 flex items-center justify-center text-lg mx-auto mb-1">🥢</div>
+                        <span class="text-[10px] text-slate-300 font-bold block">2. Kerongkongan</span>
+                    </div>
+                    <div class="h-1 flex-1 bg-slate-700 rounded"></div>
+                    <div class="sim-node text-center z-10" id="sim-lambung">
+                        <div class="w-10 h-10 rounded-full bg-yellow-500/30 border border-yellow-400 flex items-center justify-center text-lg mx-auto mb-1">🧪</div>
+                        <span class="text-[10px] text-slate-300 font-bold block">3. Lambung</span>
+                    </div>
+                    <div class="h-1 flex-1 bg-slate-700 rounded"></div>
+                    <div class="sim-node text-center z-10" id="sim-usushalus">
+                        <div class="w-10 h-10 rounded-full bg-emerald-500/30 border border-emerald-400 flex items-center justify-center text-lg mx-auto mb-1">✨</div>
+                        <span class="text-[10px] text-slate-300 font-bold block">4. Usus Halus</span>
+                    </div>
+                    <div class="h-1 flex-1 bg-slate-700 rounded"></div>
+                    <div class="sim-node text-center z-10" id="sim-ususbesar">
+                        <div class="w-10 h-10 rounded-full bg-sky-500/30 border border-sky-400 flex items-center justify-center text-lg mx-auto mb-1">💧</div>
+                        <span class="text-[10px] text-slate-300 font-bold block">5. Usus Besar</span>
+                    </div>
+
+                    <!-- Traveling Food Avatar -->
+                    <div id="sim-food-avatar" class="absolute top-1/2 -translate-y-1/2 left-6 text-3xl transition-all duration-700 z-20 filter drop-shadow">
+                        🍚
+                    </div>
+                </div>
+
+                <!-- Simulation Status Log -->
+                <div id="sim-status" class="bg-slate-800/60 p-4 rounded-xl border border-slate-700 text-xs text-amber-200 flex items-start gap-3">
+                    <span class="text-base">💡</span>
+                    <div>
+                        <strong class="text-white block font-heading mb-0.5" id="sim-status-title">Siap Memulai Simulasi</strong>
+                        <p id="sim-status-desc" class="text-slate-300">Pilih salah satu makanan di atas untuk melihat bagaimana organ pencernaan bekerja secara runtut!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: PEMAHAMAN (SUSUN ALUR & PASANGKAN ORGAN) -->
+        <section id="sec-pemahaman" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full">Tahap 3: Pemahaman Konsep</span>
+                    <h2 class="text-2xl font-bold font-heading text-slate-800 mt-1">Tantangan Susun Urutan Perjalanan Makanan</h2>
+                    <p class="text-slate-600 text-sm">Susunlah organ-organ di bawah ini sesuai urutan alur makanan yang benar dari awal hingga akhir!</p>
+                </div>
+
+                <!-- Ordering Activity Board -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Pilihan Organ yang Belum Disusun -->
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 space-y-3">
+                        <h4 class="font-bold font-heading text-slate-700 text-sm">Kartu Organ (Klik untuk Memindahkan)</h4>
+                        <div id="pool-organs" class="flex flex-wrap gap-2 min-h-[120px]">
+                            <!-- Draggable / Clickable cards generated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Slot Urutan (1 sampai 6) -->
+                    <div class="bg-amber-50/60 p-5 rounded-2xl border border-amber-200 space-y-3">
+                        <h4 class="font-bold font-heading text-amber-900 text-sm">Urutan Alur Pencernaanmu</h4>
+                        <div id="target-slots" class="space-y-2">
+                            <!-- Slots generated dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <button onclick="resetOrderGame()" class="px-4 py-2 rounded-xl bg-slate-100 text-slate-600 text-xs font-bold hover:bg-slate-200 transition">
+                        🔄 Ulangi Urutan
+                    </button>
+                    <button onclick="checkOrderAnswer()" class="px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-sm shadow-md transition">
+                        Cek Jawaban Saya ✨
+                    </button>
+                </div>
+
+                <!-- Feedback Area -->
+                <div id="order-feedback" class="hidden p-4 rounded-2xl text-sm border"></div>
+            </div>
+
+            <!-- Quiz Pemahaman Mekanik vs Kimiawi -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <h3 class="text-lg font-bold font-heading text-slate-800 flex items-center gap-2">
+                    <span>🧩</span> Quiz Cepat: Mekanik atau Kimiawi?
+                </h3>
+                <p class="text-sm text-slate-600">Pilihlah jenis pencernaan yang tepat untuk setiap aktivitas organ berikut:</p>
+                
+                <div class="space-y-3" id="type-quiz-container">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: APLIKASI (STUDI KASUS & PENYIDIK KESEHATAN) -->
+        <section id="sec-aplikasi" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <span class="bg-rose-100 text-rose-800 text-xs font-bold px-3 py-1 rounded-full">Tahap 4: Aplikasi Kehidupan Nyata</span>
+                    <h2 class="text-2xl font-bold font-heading text-slate-800 mt-1">Detektif Pencernaan Sehat 🕵️‍♂️</h2>
+                    <p class="text-slate-600 text-sm">Analisislah masalah kesehatan yang dialami teman-temanmu di bawah ini dan berikan solusinya!</p>
+                </div>
+
+                <!-- Case Selector Tabs -->
+                <div class="flex flex-wrap gap-2 border-b border-slate-200 pb-3">
+                    <button onclick="selectCase(0)" id="case-tab-0" class="case-btn px-4 py-2 rounded-xl font-bold text-xs bg-amber-500 text-white shadow-sm">Kasus 1: Budi Sulit BAB</button>
+                    <button onclick="selectCase(1)" id="case-tab-1" class="case-btn px-4 py-2 rounded-xl font-bold text-xs bg-slate-100 text-slate-600 hover:bg-slate-200">Kasus 2: Siti Sakit Perut</button>
+                    <button onclick="selectCase(2)" id="case-tab-2" class="case-btn px-4 py-2 rounded-xl font-bold text-xs bg-slate-100 text-slate-600 hover:bg-slate-200">Kasus 3: Doni Diare</button>
+                </div>
+
+                <!-- Active Case Display -->
+                <div id="case-content" class="bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
+                    <!-- Dynamic case content -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: REFLEKSI & KOMITMEN SEHAT -->
+        <section id="sec-refleksi" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <div>
+                    <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-3 py-1 rounded-full">Tahap 5: Refleksi & Metakognisi</span>
+                    <h2 class="text-2xl font-bold font-heading text-slate-800 mt-1">Jurnal Refleksi Pembelajar Sehat 📝</h2>
+                    <p class="text-slate-600 text-sm">Mari merenungkan apa yang sudah kamu pelajari dan buat komitmen untuk menjaga kesehatan tubuhmu!</p>
+                </div>
+
+                <!-- Interactive Metacognitive Prompts -->
+                <div class="space-y-4">
+                    <div class="bg-amber-50/80 p-5 rounded-2xl border border-amber-200 space-y-2">
+                        <label class="font-bold font-heading text-amber-900 text-sm block">1. Apa hal paling penting yang kamu pahami hari ini tentang sistem pencernaan?</label>
+                        <textarea id="ref-q1" rows="2" class="w-full p-3 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-400 focus:outline-none text-sm text-slate-800" placeholder="Contoh: Saya paham bahwa makanan dicerna agar zat gizinya bisa diserap tubuh..."></textarea>
+                    </div>
+
+                    <div class="bg-amber-50/80 p-5 rounded-2xl border border-amber-200 space-y-2">
+                        <label class="font-bold font-heading text-amber-900 text-sm block">2. Apa yang akan terjadi pada tubuh jika kita tidak mengunyah makanan dengan halus?</label>
+                        <textarea id="ref-q2" rows="2" class="w-full p-3 rounded-xl border border-amber-300 focus:ring-2 focus:ring-amber-400 focus:outline-none text-sm text-slate-800" placeholder="Contoh: Lambung akan bekerja terlalu keras sehingga perut terasa sakit..."></textarea>
+                    </div>
+
+                    <!-- Commitment Checklist -->
+                    <div class="bg-emerald-50/80 p-5 rounded-2xl border border-emerald-200 space-y-3">
+                        <h4 class="font-bold font-heading text-emerald-900 text-sm">3. Janji Kebiasaan Sehatku Mulai Hari Ini (Pilih yang akan kamu lakukan):</h4>
+                        <div class="space-y-2 text-xs sm:text-sm text-slate-700">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" class="ref-check rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                                <span>Mengunyah makanan minimal 20 kali sampai halus sebelum menelan.</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" class="ref-check rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                                <span>Minum air putih setidaknya 8 gelas setiap hari.</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" class="ref-check rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                                <span>Makan sayur dan buah kaya serat setiap hari.</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" class="ref-check rounded text-emerald-600 focus:ring-emerald-500 w-4 h-4">
+                                <span>Mencuci tangan dengan sabun sebelum dan sesudah makan.</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center pt-2">
+                    <button onclick="submitReflection()" class="px-8 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-2xl shadow-lg transition transform hover:-translate-y-0.5">
+                        Simpan Jurnal & Lihat Rapor Petualang 🎉
+                    </button>
+                </div>
+            </div>
+
+            <!-- SECTION 6: RAPOR PETUALANG (CERTIFICATE & SUMMARY) -->
+            <div id="rapor-modal" class="hidden bg-white p-6 sm:p-8 rounded-3xl border-2 border-amber-300 shadow-2xl space-y-6">
+                <div class="text-center space-y-2">
+                    <div class="inline-block p-4 bg-amber-100 rounded-full text-4xl">🏆</div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold font-heading text-slate-800">Sertifikat Duta Pencernaan Sehat</h2>
+                    <p class="text-xs sm:text-sm text-slate-500">Selamat! Kamu telah menyelesaikan petualangan Pembelajaran Mendalam IPAS Kelas V!</p>
+                </div>
+
+                <div class="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-2xl border border-amber-200 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div>
+                        <span class="text-xs text-slate-500 block">Total XP Diraih</span>
+                        <span class="text-2xl font-black font-heading text-amber-600" id="final-xp">0 XP</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 block">Tingkat Pemahaman</span>
+                        <span class="text-2xl font-black font-heading text-emerald-600" id="final-level">Mendalam 🌟</span>
+                    </div>
+                    <div>
+                        <span class="text-xs text-slate-500 block">Lencana Penghargaan</span>
+                        <span class="text-2xl font-black font-heading text-purple-600" id="final-badge">Penyidik Cerna</span>
+                    </div>
+                </div>
+
+                <!-- Reflection Summary Box -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs space-y-2">
+                    <h4 class="font-bold text-slate-700">Rangkuman Refleksimu:</h4>
+                    <p id="summary-q1" class="text-slate-600 italic">"..."</p>
+                    <p id="summary-check" class="text-emerald-700 font-semibold">Komitmen Sehat: Terdaftar</p>
+                </div>
+
+                <div class="flex justify-center gap-3">
+                    <button onclick="window.print()" class="px-5 py-2.5 rounded-xl bg-slate-800 text-white font-bold text-xs hover:bg-slate-700 transition">
+                        🖨️ Cetak / Simpan Rapor
+                    </button>
+                    <button onclick="switchTab('orientasi')" class="px-5 py-2.5 rounded-xl bg-amber-500 text-white font-bold text-xs hover:bg-amber-600 transition">
+                        🔄 Pelajari Lagi
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating Ask Doctor Digestive Assistant Button -->
+    <div class="fixed bottom-5 right-5 z-50">
+        <button onclick="openDoctorModal()" class="bg-gradient-to-r from-teal-500 to-emerald-500 hover:from-teal-600 hover:to-emerald-600 text-white p-3.5 sm:px-5 sm:py-3.5 rounded-full shadow-2xl flex items-center gap-2 transform hover:scale-105 transition">
+            <span class="text-2xl">👨‍⚕️</span>
+            <span class="font-bold font-heading text-sm hidden sm:inline">Tanya Dokter Cerna</span>
+        </button>
+    </div>
+
+    <!-- Doctor AI Modal -->
+    <div id="doctor-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 flex flex-col max-h-[85vh] overflow-hidden">
+            <!-- Modal Header -->
+            <div class="bg-teal-600 text-white p-4 sm:p-5 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-white/20 flex items-center justify-center text-xl">👨‍⚕️</div>
+                    <div>
+                        <h3 class="font-bold font-heading text-base sm:text-lg">Dokter Cerna (Asisten AI)</h3>
+                        <p class="text-xs text-teal-100">Tanyakan apapun tentang makanan & perutmu!</p>
+                    </div>
+                </div>
+                <button onclick="closeDoctorModal()" class="text-white/80 hover:text-white font-bold text-xl px-2">✕</button>
+            </div>
+
+            <!-- Chat Output Container -->
+            <div id="doctor-chat-log" class="p-4 space-y-3 overflow-y-auto flex-grow text-xs sm:text-sm bg-slate-50">
+                <div class="bg-teal-50 border border-teal-200 p-3 rounded-2xl text-teal-900">
+                    Halo! Saya Dokter Cerna 👨‍⚕️. Punya pertanyaan tentang mengapa perut mules, bagaimana usus bekerja, atau makanan sehat? Tanyakan pada saya!
+                </div>
+            </div>
+
+            <!-- Chat Input Bar -->
+            <div class="p-3 bg-white border-t border-slate-200 flex gap-2">
+                <input type="text" id="doctor-input" placeholder="Ketik pertanyaanmu di sini..." class="flex-grow p-2.5 border border-slate-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-teal-500" onkeypress="if(event.key === 'Enter') askDoctor()">
+                <button onclick="askDoctor()" id="doctor-send-btn" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-4 py-2.5 rounded-xl text-xs transition">
+                    Kirim
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userScore = 0;
+        let soundEnabled = true;
+
+        // Organ Database
+        const organData = {
+            mulut: {
+                name: "Mulut",
+                icon: "👄",
+                color: "bg-red-500",
+                desc: "Gerbang utama masuknya makanan ke dalam tubuh.",
+                mekanik: "Gigi memotong dan mengunyah makanan menjadi potongan kecil, dibantu oleh lidah.",
+                kimiawi: "Kelenjar ludah menghasilkan enzim Amilase (Ptyalin) yang mengubah karbohidrat/nasi menjadi gula sederhana.",
+                funFact: "Kelenjar ludahmu bisa menghasilkan 1-1.5 liter air liur setiap hari!",
+                tips: "Kunyah makananmu setidaknya 20 kali agar lambung tidak bekerja terlalu berat."
+            },
+            kerongkongan: {
+                name: "Kerongkongan (Esofagus)",
+                icon: "🥢",
+                color: "bg-orange-500",
+                desc: "Saluran otot berpanjang sekitar 20 cm yang menghubungkan mulut dengan lambung.",
+                mekanik: "Gerakan Peristaltik (otot meremas dan mendorong makanan turun ke lambung).",
+                kimiawi: "Tidak ada pencernaan kimiawi di kerongkongan.",
+                funFact: "Gerakan peristaltik sangat kuat, sehingga makanan tetap bisa sampai ke lambung meskipun kamu sedang jungkir balik!",
+                tips: "Hindari makan sambil tiduran agar makanan tidak naik kembali."
+            },
+            lambung: {
+                name: "Lambung",
+                icon: "🧪",
+                color: "bg-yellow-500",
+                desc: "Kantung berotot kuat berbentuk seperti huruf 'J' di sebelah kiri rongga perut.",
+                mekanik: "Otot dinding lambung mengaduk dan meremas makanan seperti mesin pengaduk (blender).",
+                kimiawi: "Asam Lambung (HCl) membunuh kuman. Enzim Pepsin memecah protein, dan Renin mengendapkan protein susu.",
+                funFact: "Asam lambung sangat kuat, namun dinding lambung dilapisi lendir khusus agar tidak terluka oleh asamnya sendiri!",
+                tips: "Makanlah secara teratur agar asam lambung tidak mengiritasi dinding perut yang kosong."
+            },
+            usushalus: {
+                name: "Usus Halus",
+                icon: "✨",
+                color: "bg-emerald-500",
+                desc: "Saluran pencernaan terpanjang (mencapai 6 meter pada orang dewasa) yang terlipat-lipat rapi.",
+                mekanik: "Gerakan meremas lembut untuk mencampur makanan dengan getah pencernaan.",
+                kimiawi: "Enzim dari pankreas & empedu memecah lemak, karbohidrat, dan protein menjadi zat gizi terkecil yang kemudian diserap oleh jonjot usus (Vili) ke pembuluh darah.",
+                funFact: "Jika jonjot-jonjot usus halus dibentangkan, luas permukaannya sama dengan luas lapangan tenis!",
+                tips: "Makan makanan berprotein dan bernutrisi tinggi agar diserap maksimal di usus halus."
+            },
+            ususbesar: {
+                name: "Usus Besar",
+                icon: "💧",
+                color: "bg-sky-500",
+                desc: "Saluran berbentuk huruf 'U' terbalik yang mengelilingi usus halus.",
+                mekanik: "Mendorong sisa makanan menuju rektum.",
+                kimiawi: "Dibantu oleh bakteri baik (E. coli) untuk membusukkan sisa makanan dan membentuk Vitamin K. Terjadi penyerapan air dan garam mineral.",
+                funFact: "Triliunan bakteri baik hidup di usus besarmu dan membantu menjaga kekebalan tubuh!",
+                tips: "Banyak minum air putih dan makan makanan berserat (buah/sayur) agar sisa makanan mudah dibuang."
+            },
+            rektum: {
+                name: "Rektum & Anus",
+                icon: "🚪",
+                color: "bg-purple-500",
+                desc: "Rektum adalah tempat penyimpanan sementara kotoran (feses), dan Anus adalah lubang pengeluarannya.",
+                mekanik: "Mendorong dan mengeluarkan feses dari tubuh saat BAB.",
+                kimiawi: "Tidak ada pencernaan kimiawi.",
+                funFact: "Rektum memberikan sinyal ke otak ketika sudah penuh, memberi tahu kamu saatnya pergi ke kamar mandi!",
+                tips: "Jangan pernah menahan keinginan untuk buang air besar (BAB)."
+            }
+        };
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(400, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.05);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.05);
+                } else if (type === 'success') {
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.3);
+                }
+            } catch (e) {
+                console.log("Audio not supported");
+            }
+        }
+
+        function toggleAudio() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('audio-btn').innerText = soundEnabled ? '🔊' : '🔇';
+        }
+
+        function addXP(amount) {
+            userScore += amount;
+            document.getElementById('user-score').innerText = userScore;
+            playSound('success');
+        }
+
+        function switchTab(tabId) {
+            playSound('click');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`sec-${tabId}`).classList.remove('hidden');
+
+            // Update Desktop Nav Buttons
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-white', 'shadow-sm');
+                btn.classList.add('text-amber-800');
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-amber-500', 'text-white', 'shadow-sm');
+                activeNav.classList.remove('text-amber-800');
+            }
+
+            // Update Mobile Nav
+            document.querySelectorAll('[id^="mnav-"]').forEach(btn => {
+                btn.classList.remove('bg-amber-500', 'text-white');
+                btn.classList.add('bg-white/60', 'text-amber-900');
+            });
+            const activeMobileNav = document.getElementById(`mnav-${tabId}`);
+            if (activeMobileNav) {
+                activeMobileNav.classList.add('bg-amber-500', 'text-white');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function setInitialHabit(type, btnEl) {
+            document.querySelectorAll('.habit-opt').forEach(b => b.classList.remove('border-amber-500', 'bg-amber-50'));
+            btnEl.classList.add('border-amber-500', 'bg-amber-50');
+
+            const fb = document.getElementById('habit-feedback');
+            fb.classList.remove('hidden', 'bg-red-50', 'text-red-800', 'bg-emerald-50', 'text-emerald-800');
+
+            if (type === 'cepat') {
+                fb.classList.add('bg-red-50', 'text-red-800', 'border', 'border-red-200');
+                fb.innerHTML = "💡 <strong>Catatan Penting:</strong> Makan terlalu cepat membuat organ lambung bekerja ekstra keras meremas makanan keras. Di aplikasi ini kamu akan belajar mengapa mengunyah itu sangat penting!";
+            } else if (type === 'air') {
+                fb.classList.add('bg-amber-50', 'text-amber-900', 'border', 'border-amber-200');
+                fb.innerHTML = "💡 <strong>Catatan Penting:</strong> Kurang air bisa membuat usus besar menyerap terlalu banyak air dari sisa makanan, sehingga BAB menjadi keras. Yuk pelajari peranan usus besar!";
+            } else {
+                fb.classList.add('bg-emerald-50', 'text-emerald-800', 'border', 'border-emerald-200');
+                fb.innerHTML = "🌟 <strong>Luar Biasa!</strong> Kebiasaanmu sudah sangat baik. Mengunyah makanan sampai halus sangat membantu seluruh organ pencernaanmu bekerja optimal!";
+            }
+            addXP(10);
+        }
+
+        function selectOrgan(key) {
+            playSound('click');
+            const data = organData[key];
+            if (!data) return;
+
+            // Highlight SVG
+            document.querySelectorAll('ellipse, rect, path').forEach(el => {
+                if (el.id && el.id.startsWith('svg-')) {
+                    el.style.opacity = "0.7";
+                }
+            });
+            const targetSvg = document.getElementById(`svg-${key}`);
+            if (targetSvg) targetSvg.style.opacity = "1";
+
+            const card = document.getElementById('organ-detail-card');
+            card.innerHTML = `
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between border-b border-amber-200/80 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl p-2 bg-white rounded-2xl shadow-sm border border-amber-200">${data.icon}</span>
+                            <div>
+                                <h3 class="text-xl font-bold font-heading text-slate-800">${data.name}</h3>
+                                <p class="text-xs text-amber-800 font-medium">${data.desc}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="bg-white p-3.5 rounded-2xl border border-amber-200/80 space-y-1">
+                            <span class="text-xs font-bold font-heading text-red-600 flex items-center gap-1">⚙️ Pencernaan Mekanik</span>
+                            <p class="text-xs text-slate-600 leading-relaxed">${data.mekanik}</p>
+                        </div>
+                        <div class="bg-white p-3.5 rounded-2xl border border-amber-200/80 space-y-1">
+                            <span class="text-xs font-bold font-heading text-blue-600 flex items-center gap-1">🧪 Pencernaan Kimiawi</span>
+                            <p class="text-xs text-slate-600 leading-relaxed">${data.kimiawi}</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-amber-100/70 p-3.5 rounded-2xl border border-amber-300/60 text-xs text-amber-900 space-y-1">
+                        <strong class="font-heading flex items-center gap-1">💡 Tahukah Kamu?</strong>
+                        <p class="text-slate-700">${data.funFact}</p>
+                    </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-t border-amber-200/80 flex items-center justify-between text-xs text-emerald-800 font-semibold bg-emerald-50/80 p-3 rounded-xl">
+                    <span>🌱 Tips Kesehatan: ${data.tips}</span>
+                    <button onclick="addXP(5)" class="bg-emerald-600 text-white px-3 py-1 rounded-lg hover:bg-emerald-700 transition">Paham +5 XP</button>
+                </div>
+            `;
+        }
+
+        function setDigestionMode(mode) {
+            playSound('click');
+            document.querySelectorAll('[id^="mode-"]').forEach(btn => {
+                btn.classList.remove('bg-white', 'shadow-sm', 'text-slate-800');
+                btn.classList.add('text-slate-500');
+            });
+            document.getElementById(`mode-${mode}`).classList.add('bg-white', 'shadow-sm', 'text-slate-800');
+
+            if (mode === 'mekanik') {
+                alert("Organ dengan pencernaan Mekanik utama: Mulut (gigi), Kerongkongan (peristaltik), dan Lambung (remasan otot).");
+            } else if (mode === 'kimiawi') {
+                alert("Organ dengan pencernaan Kimiawi utama: Mulut (enzim ptyalin), Lambung (asam & pepsin), dan Usus Halus (enzim pankreas & empedu).");
+            }
+        }
+
+        function startFoodSimulation(foodName, emoji) {
+            playSound('click');
+            const avatar = document.getElementById('sim-food-avatar');
+            avatar.innerText = emoji;
+
+            const stages = [
+                { id: 'sim-mulut', left: '8%', title: `1. Mulut (${foodName})`, desc: 'Makanan dipotong dan dikunyah gigi, serta dicampur air liur hingga menjadi bolus lembut.' },
+                { id: 'sim-kerongkongan', left: '28%', title: '2. Kerongkongan', desc: 'Gerakan peristaltik meremas dan meremas bola makanan mendorongnya masuk ke lambung.' },
+                { id: 'sim-lambung', left: '48%', title: '3. Lambung', desc: 'Makanan diaduk dengan asam lambung & enzim pepsin selama 2-4 jam hingga menjadi bubur lunak (kimus).' },
+                { id: 'sim-usushalus', left: '68%', title: '4. Usus Halus', desc: 'Sari-sari makanan (glukosa, protein, vitamin) diserap sempurna ke dalam aliran darah!' },
+                { id: 'sim-ususbesar', left: '88%', title: '5. Usus Besar', desc: 'Air dan garam diserap kembali. Sisa yang tidak tercerna dibantu bakteri dibentuk menjadi feses.' }
+            ];
+
+            let step = 0;
+            const statusTitle = document.getElementById('sim-status-title');
+            const statusDesc = document.getElementById('sim-status-desc');
+
+            const interval = setInterval(() => {
+                if (step >= stages.length) {
+                    clearInterval(interval);
+                    statusTitle.innerText = "✨ Perjalanan Selesai!";
+                    statusDesc.innerText = `Makanan ${foodName} telah berhasil dicerna dan memberikan nutrisi & energi bagi tubuhmu!`;
+                    addXP(15);
+                    return;
+                }
+
+                const s = stages[step];
+                avatar.style.left = s.left;
+                statusTitle.innerText = s.title;
+                statusDesc.innerText = s.desc;
+
+                // Visual particle pulse
+                document.querySelectorAll('.sim-node').forEach(n => n.classList.remove('scale-110'));
+                const currentNode = document.getElementById(s.id);
+                if (currentNode) currentNode.classList.add('scale-110');
+
+                playSound('click');
+                step++;
+            }, 1800);
+        }
+
+        const correctOrganOrder = [
+            { id: 'mulut', name: 'Mulut' },
+            { id: 'kerongkongan', name: 'Kerongkongan' },
+            { id: 'lambung', name: 'Lambung' },
+            { id: 'usushalus', name: 'Usus Halus' },
+            { id: 'ususbesar', name: 'Usus Besar' },
+            { id: 'rektum', name: 'Anus / Rektum' }
+        ];
+
+        let currentPlacedOrgans = [null, null, null, null, null, null];
+
+        function initOrderGame() {
+            const poolContainer = document.getElementById('pool-organs');
+            const slotsContainer = document.getElementById('target-slots');
+
+            if (!poolContainer || !slotsContainer) return;
+
+            // Shuffle pool
+            const shuffled = [...correctOrganOrder].sort(() => Math.random() - 0.5);
+
+            poolContainer.innerHTML = '';
+            shuffled.forEach(item => {
+                poolContainer.innerHTML += `
+                    <button onclick="placeOrganInSlot('${item.id}', '${item.name}', this)" class="pool-card bg-white border-2 border-slate-200 px-3 py-2 rounded-xl text-xs font-bold text-slate-800 shadow-sm hover:border-amber-400 transition">
+                        ${organData[item.id]?.icon || '🔹'} ${item.name}
+                    </button>
+                `;
+            });
+
+            renderSlots();
+        }
+
+        function renderSlots() {
+            const slotsContainer = document.getElementById('target-slots');
+            slotsContainer.innerHTML = '';
+
+            currentPlacedOrgans.forEach((placed, index) => {
+                slotsContainer.innerHTML += `
+                    <div class="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-amber-200 text-xs">
+                        <span class="w-6 h-6 rounded-full bg-amber-200 text-amber-900 font-bold flex items-center justify-center text-[10px]">${index + 1}</span>
+                        <div class="flex-grow font-semibold text-slate-700">
+                            ${placed ? `${organData[placed.id]?.icon} ${placed.name}` : '<span class="text-slate-300 italic">Klik organ di samping untuk mengisi...</span>'}
+                        </div>
+                        ${placed ? `<button onclick="removeOrganFromSlot(${index})" class="text-red-400 font-bold hover:text-red-600 px-2">✕</button>` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        function placeOrganInSlot(id, name, btnEl) {
+            playSound('click');
+            const emptyIndex = currentPlacedOrgans.findIndex(x => x === null);
+            if (emptyIndex === -1) {
+                alert("Semua slot sudah terisi! Klik tombol X jika ingin mengganti.");
+                return;
+            }
+            currentPlacedOrgans[emptyIndex] = { id, name };
+            btnEl.classList.add('hidden');
+            renderSlots();
+        }
+
+        function removeOrganFromSlot(index) {
+            playSound('click');
+            const removed = currentPlacedOrgans[index];
+            if (!removed) return;
+
+            currentPlacedOrgans[index] = null;
+
+            // Show card back in pool
+            document.querySelectorAll('.pool-card').forEach(btn => {
+                if (btn.innerText.includes(removed.name)) {
+                    btn.classList.remove('hidden');
+                }
+            });
+
+            renderSlots();
+        }
+
+        function resetOrderGame() {
+            playSound('click');
+            currentPlacedOrgans = [null, null, null, null, null, null];
+            document.getElementById('order-feedback').classList.add('hidden');
+            initOrderGame();
+        }
+
+        function checkOrderAnswer() {
+            playSound('click');
+            const fb = document.getElementById('order-feedback');
+            fb.classList.remove('hidden', 'bg-red-50', 'text-red-800', 'border-red-200', 'bg-emerald-50', 'text-emerald-800', 'border-emerald-200');
+
+            let isAllCorrect = true;
+            for (let i = 0; i < correctOrganOrder.length; i++) {
+                if (!currentPlacedOrgans[i] || currentPlacedOrgans[i].id !== correctOrganOrder[i].id) {
+                    isAllCorrect = false;
+                    break;
+                }
+            }
+
+            if (isAllCorrect) {
+                fb.classList.add('bg-emerald-50', 'text-emerald-900', 'border-emerald-200');
+                fb.innerHTML = `
+                    🎉 <strong>LUAR BIASA! URUTANMU 100% BENAR!</strong><br>
+                    Makanan mengalir dengan sempurna dari Mulut ➡️ Kerongkongan ➡️ Lambung ➡️ Usus Halus ➡️ Usus Besar ➡️ Anus.
+                `;
+                addXP(30);
+            } else {
+                fb.classList.add('bg-red-50', 'text-red-900', 'border-red-200');
+                fb.innerHTML = `
+                    💡 <strong>Ada urutan yang belum tepat.</strong><br>
+                    Ingat alurnya: Makanan dikunyah di <b>Mulut</b>, ditelan lewat <b>Kerongkongan</b>, diaduk di <b>Lambung</b>, diserap nutrisinya di <b>Usus Halus</b>, diserap airnya di <b>Usus Besar</b>, lalu sisa makanan dibuang lewat <b>Anus</b>. Coba perbaiki urutanmu ya!
+                `;
+            }
+        }
+
+        const typeQuizQuestions = [
+            { q: "1. Gigi memotong makanan keras menjadi serpihan kecil.", type: "mekanik", explanation: "Benar! Gigi secara fisik memotong/menghancurkan makanan tanpa merubah zat kimianya." },
+            { q: "2. Air liur mengubah karbohidrat nasi menjadi berasa manis.", type: "kimiawi", explanation: "Benar! Enzim Amilase (Ptyalin) dalam ludah memecah zat tepung secara kimiawi." },
+            { q: "3. Dinding lambung meremas-remas makanan seperti blender.", type: "mekanik", explanation: "Benar! Otot lambung bergerak secara fisik untuk mengaduk makanan." },
+            { q: "4. Asam lambung (HCl) mematikan kuman pada makanan.", type: "kimiawi", explanation: "Benar! Asam lambung adalah zat kimia pereaksi yang membunuh kuman." }
+        ];
+
+        function renderTypeQuiz() {
+            const container = document.getElementById('type-quiz-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            typeQuizQuestions.forEach((item, idx) => {
+                container.innerHTML += `
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                        <p class="text-xs font-bold text-slate-800">${item.q}</p>
+                        <div class="flex gap-2">
+                            <button onclick="answerTypeQuiz(${idx}, 'mekanik', this)" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-bold hover:bg-amber-100 transition">⚙️ Mekanik</button>
+                            <button onclick="answerTypeQuiz(${idx}, 'kimiawi', this)" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-bold hover:bg-amber-100 transition">🧪 Kimiawi</button>
+                        </div>
+                        <div id="tq-fb-${idx}" class="hidden text-xs p-2 rounded-lg mt-1"></div>
+                    </div>
+                `;
+            });
+        }
+
+        function answerTypeQuiz(qIdx, chosen, btn) {
+            playSound('click');
+            const q = typeQuizQuestions[qIdx];
+            const fb = document.getElementById(`tq-fb-${qIdx}`);
+            fb.classList.remove('hidden', 'bg-emerald-100', 'text-emerald-900', 'bg-red-100', 'text-red-900');
+
+            if (chosen === q.type) {
+                fb.classList.add('bg-emerald-100', 'text-emerald-900');
+                fb.innerHTML = `✅ <b>Tepat Sekali!</b> ${q.explanation}`;
+                addXP(10);
+            } else {
+                fb.classList.add('bg-red-100', 'text-red-900');
+                fb.innerHTML = `❌ <b>Kurang Tepat.</b> Jawaban yang benar adalah <b>${q.type.toUpperCase()}</b>. ${q.explanation}`;
+            }
+        }
+
+        const casesData = [
+            {
+                title: "Kasus 1: Budi Sulit Buang Air Besar (Sembelit)",
+                avatar: "👦",
+                problem: "Budi mengeluh perutnya mulas dan sakit saat BAB. Setelah diselidiki, Budi sangat jarang makan buah dan sayur, serta lebih suka minum es teh manis daripada air putih.",
+                organInvolved: "Usus Besar",
+                options: [
+                    { text: "Memberi Budi obat tidur agar tidak merasa sakit", correct: false, feedback: "Kurang tepat. Obat tidur tidak menyelesaikan akar masalah di usus besar Budi." },
+                    { text: "Menyarankan Budi minum air putih yang cukup dan makan sayur kaya serat", correct: true, feedback: "Sangat Tepat! Serat dan air membuat sisa makanan di usus besar menjadi lunak dan mudah dikeluarkan." },
+                    { text: "Menyuruh Budi makan makanan yang sangat pedas", correct: false, feedback: "Berbahaya! Makanan sangat pedas justru bisa mengiritasi usus dan lambung Budi." }
+                ]
+            },
+            {
+                title: "Kasus 2: Siti Sakit Perut Setelah Makan Roti Cepat-cepat",
+                avatar: "👧",
+                problem: "Siti terburu-buru berangkat sekolah sehingga menelan potongan roti besar-besar tanpa mengunyahnya sampai halus. Tak lama kemudian perut bagian atasnya terasa sebah dan mual.",
+                organInvolved: "Mulut & Lambung",
+                options: [
+                    { text: "Menjelaskan bahwa gigi Siti belum melumatkan roti, sehingga lambung bekerja terlalu keras meremasnya", correct: true, feedback: "Sangat Tepat! Pencernaan mekanik di mulut yang kurang maksimal membebankan kerja otot lambung." },
+                    { text: "Menyarankan Siti berlari-lari setelah makan", correct: false, feedback: "Kurang tepat. Berlari setelah makan saat perut penuh bisa menyebabkan kram perut." }
+                ]
+            },
+            {
+                title: "Kasus 3: Doni Mengalami Diare",
+                avatar: "🧒",
+                problem: "Doni jajan sembarangan di pinggir jalan yang terbuka dan banyak lalat. Malam harinya Doni bolak-balik ke kamar mandi karena BAB sangat cair.",
+                organInvolved: "Usus Besar & Kuman",
+                options: [
+                    { text: "Membantu Doni minum larutan Oralit/air matang agar tidak dehidrasi dan menjaga kebersihan makanan", correct: true, feedback: "Sangat Tepat! Diare membuat tubuh kehilangan banyak cairan dari usus besar, sehingga Oralit sangat penting!" },
+                    { text: "Menyarankan Doni tidak minum air sama sekali", correct: false, feedback: "Sangat Bahaya! Kurang minum saat diare bisa menyebabkan dehidrasi parah!" }
+                ]
+            }
+        ];
+
+        function selectCase(index) {
+            playSound('click');
+            document.querySelectorAll('.case-btn').forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add('bg-amber-500', 'text-white');
+                    btn.classList.remove('bg-slate-100', 'text-slate-600');
+                } else {
+                    btn.classList.remove('bg-amber-500', 'text-white');
+                    btn.classList.add('bg-slate-100', 'text-slate-600');
+                }
+            });
+
+            const c = casesData[index];
+            const container = document.getElementById('case-content');
+            container.innerHTML = `
+                <div class="flex items-start gap-4">
+                    <span class="text-4xl p-3 bg-white rounded-2xl shadow-sm border border-slate-200">${c.avatar}</span>
+                    <div class="space-y-1">
+                        <h3 class="font-bold font-heading text-slate-800 text-lg">${c.title}</h3>
+                        <span class="inline-block bg-rose-100 text-rose-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full">Organ Terdampak: ${c.organInvolved}</span>
+                        <p class="text-xs sm:text-sm text-slate-600 pt-1 leading-relaxed">${c.problem}</p>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-200 space-y-2">
+                    <h4 class="font-bold font-heading text-xs text-slate-700">Analisis & Rekomendasi Solusimu sebagai Detektif:</h4>
+                    <div class="space-y-2">
+                        ${c.options.map((opt, oIdx) => `
+                            <button onclick="answerCase(${index}, ${oIdx}, this)" class="w-full text-left p-3 rounded-xl border border-slate-200 bg-white hover:border-amber-400 text-xs sm:text-sm font-medium text-slate-700 transition">
+                                ${opt.text}
+                            </button>
+                        `).join('')}
+                    </div>
+                    <div id="case-fb-${index}" class="hidden p-3.5 rounded-xl text-xs mt-2 border"></div>
+                </div>
+            `;
+        }
+
+        function answerCase(caseIdx, optIdx, btn) {
+            playSound('click');
+            const c = casesData[caseIdx];
+            const opt = c.options[optIdx];
+            const fb = document.getElementById(`case-fb-${caseIdx}`);
+
+            fb.classList.remove('hidden', 'bg-emerald-50', 'text-emerald-900', 'border-emerald-200', 'bg-red-50', 'text-red-900', 'border-red-200');
+
+            if (opt.correct) {
+                fb.classList.add('bg-emerald-50', 'text-emerald-900', 'border-emerald-200');
+                fb.innerHTML = `🌟 <strong>Analisis Solusimu Sangat Akurat!</strong><br>${opt.feedback}`;
+                addXP(20);
+            } else {
+                fb.classList.add('bg-red-50', 'text-red-900', 'border-red-200');
+                fb.innerHTML = `💡 <strong>Perlu Analisis Ulang.</strong><br>${opt.feedback}`;
+            }
+        }
+
+        function submitReflection() {
+            playSound('success');
+            const q1 = document.getElementById('ref-q1').value || "Saya telah memahami alur dan kesehatan organ pencernaan.";
+            
+            document.getElementById('final-xp').innerText = `${userScore} XP`;
+            document.getElementById('summary-q1').innerText = `"${q1}"`;
+
+            // Display Report Certificate
+            document.getElementById('rapor-modal').classList.remove('hidden');
+            window.scrollTo({ top: document.getElementById('rapor-modal').offsetTop - 50, behavior: 'smooth' });
+            addXP(25);
+        }
+
+        function openDoctorModal() {
+            playSound('click');
+            document.getElementById('doctor-modal').classList.remove('hidden');
+        }
+
+        function closeDoctorModal() {
+            document.getElementById('doctor-modal').classList.add('hidden');
+        }
+
+        async function askDoctor() {
+            const inputEl = document.getElementById('doctor-input');
+            const query = inputEl.value.trim();
+            if (!query) return;
+
+            const chatLog = document.getElementById('doctor-chat-log');
+            
+            // Append User Question
+            chatLog.innerHTML += `
+                <div class="bg-white border border-slate-200 p-3 rounded-2xl text-slate-800 font-medium ml-6 shadow-sm">
+                    <strong>Kamu:</strong> ${query}
+                </div>
+            `;
+            inputEl.value = '';
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            // Append Loading Indicator
+            const loadingId = 'load-' + Date.now();
+            chatLog.innerHTML += `
+                <div id="${loadingId}" class="bg-teal-50 border border-teal-200 p-3 rounded-2xl text-teal-800 text-xs flex items-center gap-2">
+                    <span class="animate-spin">🌀</span> Dokter Cerna sedang berpikir...
+                </div>
+            `;
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            try {
+                const systemPrompt = "Kamu adalah Dokter Cerna, seorang dokter anak yang sangat ramah, hangat, dan komunikatif untuk siswa kelas 5 SD. Jawablah pertanyaan siswa tentang sistem pencernaan manusia, kesehatan perut, makanan, atau kebiasaan hidup secara sederhana, mudah dipahami, menarik, dan menggunakan analogi ramah anak. Maksimal 3-4 kalimat ringkas.";
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+                const payload = {
+                    contents: [{ parts: [{ text: query }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                const res = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf ya, Dokter Cerna sedang merawat pasien lain. Coba tanyakan lagi nanti ya!";
+
+                document.getElementById(loadingId).remove();
+                chatLog.innerHTML += `
+                    <div class="bg-teal-50 border border-teal-200 p-3 rounded-2xl text-teal-950 font-normal shadow-sm">
+                        <strong>👨‍⚕️ Dokter Cerna:</strong> ${reply}
+                    </div>
+                `;
+            } catch (err) {
+                document.getElementById(loadingId).remove();
+                chatLog.innerHTML += `
+                    <div class="bg-amber-50 border border-amber-200 p-3 rounded-2xl text-amber-900 text-xs">
+                        👨‍⚕️ Dokter Cerna menyarankan untuk menjaga kesehatan pencernaan dengan rutin minum air putih dan makan sayur!
+                    </div>
+                `;
+            }
+            chatLog.scrollTop = chatLog.scrollHeight;
+        }
+
+        window.onload = function() {
+            selectOrgan('mulut');
+            initOrderGame();
+            renderTypeQuiz();
+            selectCase(0);
+        };
+    </script>
+</body>
+</html>
